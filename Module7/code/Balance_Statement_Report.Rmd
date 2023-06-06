@@ -1,0 +1,64 @@
+---
+title: "Balance Statement Report"
+author: "Caleb Class, Team Member 2, Team Member 3"
+date: "2023-02-07"
+output: html_document
+---
+
+# Introduction
+This report summarizes the balance statement from 2008-2011.
+
+```{r}
+# Load libraries in report
+library(tidyverse)
+
+# Load in the data set
+# Easiest if data set is in same folder as report
+balance_sheet <- read_csv("Example_Pharmacy_Balance_Sheet.csv")
+balance_sheet
+
+```
+
+There were `r nrow(balance_sheet)` rows in the data set.
+
+# Results 
+
+## Summary for 2011
+
+This table provides the total balance for **2011** (summarized by *category*).
+
+```{r}
+
+summary_2011 <- balance_sheet %>%
+    filter(Year == 2011) %>%
+    group_by(Category) %>%
+    summarize(Total = sum(Amount))
+summary_2011
+
+```
+
+
+The equity for 2011 was `r summary_2011$Total[3]`.
+
+
+## Balance over time
+
+This chart shows the balance over time. Equity decreased slightly in 2011.
+
+```{r, fig.height = 3, fig.width = 5}
+
+balance_sheet %>%
+    group_by(Year, Category) %>%
+    summarize(Total = sum(Amount)) %>%
+    ggplot() +
+    geom_line(aes(x = Year, y = Total, color = Category))
+#ggsave("BalanceOverTime.jpg",
+#       height = 3, width = 5)
+
+
+```
+
+# Conclusion
+
+
+
